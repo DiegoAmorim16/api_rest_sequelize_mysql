@@ -1,0 +1,11 @@
+node_modules
+.env
+*.jpg
+*.png
+*.gif
+junk.js
+pull-server.sh
+setup-linux-mac.sh
+setup-windows.bat
+sync.sh
+db.sqlite
