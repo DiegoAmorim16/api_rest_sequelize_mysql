@@ -11,6 +11,18 @@ class UserController {
       return res.json(null);
     }
   }
+  async show(req,res){
+    try {
+      const user = await User.findByPk(req.params.id);
+      if(!user){
+        res.json({error: "Usuario não encontrado!"})
+      }
+      return res.json(user);
+    } catch (e) {
+      console.log(e)
+      return res.json({error: "Usuario não encontrado!"});
+    }
+  }
 }
 
 export default new UserController();
