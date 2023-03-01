@@ -7,20 +7,74 @@ class UserController {
       const users = await User.findAll({ attributes: ['id', 'nome', 'email'] });
       return res.json(users);
     } catch (e) {
-      
-      return res.json(null);
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
     }
   }
-  async show(req,res){
+  async create(req, res) {
+    try {
+      const novoUser = await User.create(req.body);
+      if (!novoUser) {
+        res.json({ error: 'Erro ao criar usuario' });
+      }
+      const { id, nome, email } = novoUser;
+      return res.json({ id, nome, email });
+    } catch (e) {
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
+    }
+  }
+  async show(req, res) {
     try {
       const user = await User.findByPk(req.params.id);
-      if(!user){
-        res.json({error: "Usuario não encontrado!"})
+      if (!user) {
+        res.json({ error: 'Usuario não encontrado!' });
       }
       return res.json(user);
     } catch (e) {
-      console.log(e)
-      return res.json({error: "Usuario não encontrado!"});
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
+    }
+  }
+  async update(req, res) {
+    try {
+      const user = await User.findByPk(req.params.id);
+
+      if (!user) {
+        return res.status(400).json({
+          errors: ['Usuário não existe'],
+        });
+      }
+      const novosDados = await user.update(req.body);
+      const { id, nome, email } = novosDados;
+      return res.json({ id, nome, email });
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const deleteUser = await User.findByPk(req.params.id);
+
+      if (!deleteUser) {
+        return res.status(400).json({
+          errors: ['Usuario não existe'],
+        });
+      }
+      await deleteUser.destroy();
+      return res.json({ status: 'deleted' });
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
     }
   }
 }
