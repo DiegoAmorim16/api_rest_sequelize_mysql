@@ -13,19 +13,16 @@ import precoConsultasRoutes from './routes/precoConsultaRoutes';
 import consultaRoutes from './routes/consultaRoutes';
 import consultaRealizadaRoutes from './routes/consultaRealizadaRoute';
 
-const whiteList = [
-
-  'http://localhost:3001',
-];
+const whiteList = ['http://localhost:3000', 'http://localhost:3001'];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if(whiteList.indexOf(origin) !== -1 || !origin) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
-  }
+  },
 };
 
 class App {
@@ -50,7 +47,7 @@ class App {
     this.app.use('/preco_consultas', precoConsultasRoutes);
     this.app.use('/consultas', consultaRoutes);
     this.app.use('/consulta', consultaRealizadaRoutes);
-    
+
     //this.app.use('/alunos/', alunoRoutes);
     //this.app.use('/fotos/', fotoRoutes);
   }
