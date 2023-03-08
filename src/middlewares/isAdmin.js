@@ -22,12 +22,13 @@ export default async (req, res, next) => {
         email,
       },
     });
-    console.log(user);
+
     if (!user) {
       return res.status(401).json({
         errors: ['Usuário inválido'],
       });
     }
+    //if(user.)
 
     req.userId = id;
     req.userEmail = email;
