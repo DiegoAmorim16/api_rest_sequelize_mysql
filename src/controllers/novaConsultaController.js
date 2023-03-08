@@ -1,17 +1,23 @@
 //import Consulta from '../models/Consulta';
 const axios = require('axios');
+import Consulta from '../models/Consulta';
 import Precos_Consultas from '../models/PrecoConsulta';
-import realizaConsulta from '../services/realizaConsulta';
+//import realizaConsulta from '../services/realizaConsulta';
 
 class NovaConsultaController {
   async store(req, res) {
     try {
       const idConsulta = req.params.id;
       const { documento, tipoPessoa } = req.body;
-      const preco = await Precos_Consultas.findOne({
+      const precoRow = await Precos_Consultas.findOne({
         where: { consulta_id: idConsulta, usuario_id: req.userId },
       });
-      if (!preco) {
+      const consultaInfo = await Consulta.findOne({
+        where: { id: idConsulta },
+      });
+
+      const nomeConsulta = consultaInfo.nome;
+      if (!precoRow) {
         return res.status(400).json({
           errors: ['Consulta não liberada!'],
         });
@@ -80,7 +86,21 @@ class NovaConsultaController {
       };
       axios(config)
         .then(function (response) {
-          return res.json(response.data);
+          const data = response.data;
+          if (data.HEADER.INFORMACOES_RETORNO.STATUS_RETORNO.CODIGO == '1') {
+            return res.json('Consulta realizada');
+          } else {
+            return res.status(400).json({
+              descricao:
+                data.HEADER.INFORMACOES_RETORNO.STATUS_RETORNO.DESCRICAO,
+              dataHoraConsulta:
+                data.HEADER.INFORMACOES_RETORNO.DATA_HORA_CONSULTA,
+
+              preco: precoRow.preco,
+              consulta_id: precoRow.consulta_id,
+              consulta: nomeConsulta,
+            });
+          }
         })
         .catch(function (error) {
           console.log(error);
