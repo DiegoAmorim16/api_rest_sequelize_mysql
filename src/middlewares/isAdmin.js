@@ -28,7 +28,11 @@ export default async (req, res, next) => {
         errors: ['Usuário inválido'],
       });
     }
-    //if(user.)
+    if (user.tipo !== 5) {
+      return res.status(401).json({
+        errors: ['Usuario não tem permissão suficientes'],
+      });
+    }
 
     req.userId = id;
     req.userEmail = email;

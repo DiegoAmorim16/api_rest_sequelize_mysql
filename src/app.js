@@ -13,6 +13,8 @@ import precoConsultasRoutes from './routes/precoConsultaRoutes';
 import consultaRoutes from './routes/consultaRoutes';
 import consultaRealizadaRoutes from './routes/consultaRealizadaRoute';
 
+import novaConsultaRoutes from './routes/novaConsultaRoutes';
+
 const whiteList = ['http://localhost:3000', 'http://localhost:3001'];
 
 const corsOptions = {
@@ -47,6 +49,7 @@ class App {
     this.app.use('/preco_consultas', precoConsultasRoutes);
     this.app.use('/consultas', consultaRoutes);
     this.app.use('/consulta', consultaRealizadaRoutes);
+    this.app.use('/novaConsulta', novaConsultaRoutes);
 
     //this.app.use('/alunos/', alunoRoutes);
     //this.app.use('/fotos/', fotoRoutes);

@@ -41,6 +41,10 @@ export default class Usuario extends Model {
             },
           },
         },
+        tipo: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
       },
       {
         tableName: 'usuario',
