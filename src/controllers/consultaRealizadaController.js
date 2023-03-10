@@ -88,6 +88,21 @@ class ConsultaRealizadaController {
       });
     }
   }
+  async count(req, res) {
+    try {
+      const { count } = await ConsultaRealizada.findAndCountAll({
+        where: {
+          id_tipo_consulta: req.params.id,
+        },
+      });
+      return res.json(count);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
+    }
+  }
 }
 
 export default new ConsultaRealizadaController();

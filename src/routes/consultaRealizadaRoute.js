@@ -8,5 +8,5 @@ router.get('/', consultaRealizadaController.index);
 router.post('/', consultaRealizadaController.store);
 router.get('/:id', consultaRealizadaController.show); // Lista usuário
 router.delete('/', consultaRealizadaController.delete);
-
+router.get('/stats/:id', consultaRealizadaController.count);
 export default router;
