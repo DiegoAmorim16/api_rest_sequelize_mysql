@@ -1,6 +1,7 @@
 //import Consulta from '../models/Consulta';
 const axios = require('axios');
 import Consulta from '../models/Consulta';
+import ConsultaRealizada from '../models/ConsultaRealizada';
 import Precos_Consultas from '../models/PrecoConsulta';
 //import realizaConsulta from '../services/realizaConsulta';
 
@@ -17,11 +18,12 @@ class NovaConsultaController {
       });
 
       const nomeConsulta = consultaInfo.nome;
-      if (!precoRow) {
+      if (!precoRow || precoRow.preco <= 0) {
         return res.status(400).json({
           errors: ['Consulta não liberada!'],
         });
       }
+      const precoConsulta = precoRow.preco;
       let data = JSON.stringify({
         CodigoProduto: '54',
         Versao: '20180521',
@@ -87,6 +89,12 @@ class NovaConsultaController {
       axios(config)
         .then(function (response) {
           const data = response.data;
+          ConsultaRealizada.create({
+            id_usuario: req.userId,
+            id_tipo_consulta: idConsulta,
+            valor_consulta: precoConsulta,
+          });
+
           if (data.HEADER.INFORMACOES_RETORNO.STATUS_RETORNO.CODIGO == '1') {
             return res.json('Consulta realizada');
           } else {

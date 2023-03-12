@@ -36,6 +36,9 @@ export default class ConsultaRealizada extends Model {
             },
           },
         },
+        result: {
+          type: Sequelize.TEXT,
+        },
       },
       {
         sequelize,
