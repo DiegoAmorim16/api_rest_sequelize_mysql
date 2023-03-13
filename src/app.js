@@ -15,7 +15,11 @@ import consultaRealizadaRoutes from './routes/consultaRealizadaRoute';
 
 import novaConsultaRoutes from './routes/novaConsultaRoutes';
 
-const whiteList = ['http://localhost:3000', 'http://localhost:3001'];
+const whiteList = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:8081',
+];
 
 const corsOptions = {
   origin: function (origin, callback) {

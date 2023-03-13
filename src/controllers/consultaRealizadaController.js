@@ -1,6 +1,7 @@
 import ConsultaRealizada from '../models/ConsultaRealizada';
 import Consulta from '../models/Consulta';
 import Usuario from '../models/User';
+import CryptoJS from 'crypto-js';
 class ConsultaRealizadaController {
   async index(req, res) {
     try {
@@ -47,7 +48,28 @@ class ConsultaRealizadaController {
           errors: ['Não encontrado!'],
         });
       }
-      res.json(consulta);
+      let {
+        id_consulta,
+        id_usuario,
+        id_tipo_consulta,
+        valor_consulta,
+        result,
+      } = consulta;
+
+      const decryptedBytes = CryptoJS.AES.decrypt(
+        result,
+        process.env.TOKEN_ADMIN,
+      );
+      const decryptedData = JSON.parse(
+        decryptedBytes.toString(CryptoJS.enc.Utf8),
+      );
+      res.json({
+        id_consulta,
+        id_usuario,
+        id_tipo_consulta,
+        valor_consulta,
+        result: decryptedData,
+      });
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),

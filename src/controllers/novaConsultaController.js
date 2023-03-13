@@ -3,6 +3,7 @@ const axios = require('axios');
 import Consulta from '../models/Consulta';
 import ConsultaRealizada from '../models/ConsultaRealizada';
 import Precos_Consultas from '../models/PrecoConsulta';
+import CryptoJS from 'crypto-js';
 //import realizaConsulta from '../services/realizaConsulta';
 
 class NovaConsultaController {
@@ -89,10 +90,16 @@ class NovaConsultaController {
       axios(config)
         .then(function (response) {
           const data = response.data;
+          const encryptedData = CryptoJS.AES.encrypt(
+            JSON.stringify(data),
+            process.env.TOKEN_ADMIN,
+          ).toString();
+
           ConsultaRealizada.create({
             id_usuario: req.userId,
             id_tipo_consulta: idConsulta,
             valor_consulta: precoConsulta,
+            result: encryptedData,
           });
 
           if (data.HEADER.INFORMACOES_RETORNO.STATUS_RETORNO.CODIGO == '1') {
